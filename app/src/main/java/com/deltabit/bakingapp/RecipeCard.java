@@ -1,11 +1,13 @@
 package com.deltabit.bakingapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.deltabit.bakingapp.model.Recipe;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ import it.gmariotti.cardslib.library.internal.Card;
 
 public class RecipeCard{
 
-    public static MaterialLargeImageCard buildRecipeCard(final Context context) {
+    public static MaterialLargeImageCard buildRecipeCard(final Context context, final Recipe recipe) {
 
         ArrayList<BaseSupplementalAction> actions = new ArrayList<>();
         TextSupplementalAction t1 = new TextSupplementalAction(context, R.id.text1);
@@ -30,6 +32,13 @@ public class RecipeCard{
             @Override
             public void onClick(Card card, View view) {
                 Toast.makeText(context, " Click on Text SHARE ", Toast.LENGTH_SHORT).show();
+
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                String shareBody = "What do you think of "+recipe.getName();
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Recipe");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+                context.startActivity(Intent.createChooser(sharingIntent, "Share via"));
             }
         });
         actions.add(t1);
@@ -45,14 +54,14 @@ public class RecipeCard{
 
         //Create a Card, set the title over the image and set the thumbnail
         MaterialLargeImageCard card = MaterialLargeImageCard.with(context)
-                .setTextOverImage("Chicken with some green things")
+                .setTextOverImage(recipe.getName())
                 .useDrawableExternal(new MaterialLargeImageCard.DrawableExternal() {
                     @Override
                     public void setupInnerViewElements(ViewGroup parent, View viewImage) {
 
                         Picasso.with(context).setIndicatorsEnabled(true);  //only for debug tests
                         Picasso.with(context)
-                                .load("http://southernglutenfree.com/wp-content/uploads/2016/01/moroccan-stuffed-onions-recipe-1060.jpg")
+                                .load(recipe.getImage())
                                 .into((ImageView) viewImage);
                     }
                 })

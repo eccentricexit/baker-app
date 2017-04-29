@@ -8,9 +8,11 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.deltabit.bakingapp.model.Recipe;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -39,11 +41,11 @@ public class RecipeActivity extends AppCompatActivity {
 
         mCardArrayAdapter = new CardArrayRecyclerViewAdapter(context, cards);
 
-        //Staggered grid view
         CardRecyclerView mRecyclerView = (CardRecyclerView) findViewById(R.id.carddemo_recyclerview2);
         mRecyclerView.setHasFixedSize(false);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-
+        //TODO: Add animation
+        //mRecyclerView.setItemAnimator(new SlideInUpAnimator(new OvershootInterpolator(1f)));
 
         //Set the empty view
         if (mRecyclerView != null) {
@@ -55,12 +57,16 @@ public class RecipeActivity extends AppCompatActivity {
     }
 
     private ArrayList<Card> initCard() {
+        Recipe dummyRecipe = new Recipe();
+        dummyRecipe.setName("Nutella Pie");
+        dummyRecipe.setImage("http://ichef.bbci.co.uk/news/660/cpsprodpb/1325A/production/_88762487_junk_food.jpg");
+
         //Init an array of Cards
         ArrayList<Card> cards = new ArrayList<>();
-        cards.add(RecipeCard.buildRecipeCard(context));
-        cards.add(RecipeCard.buildRecipeCard(context));
-        cards.add(RecipeCard.buildRecipeCard(context));
-        cards.add(RecipeCard.buildRecipeCard(context));
+        cards.add(RecipeCard.buildRecipeCard(context,dummyRecipe));
+        cards.add(RecipeCard.buildRecipeCard(context,dummyRecipe));
+        cards.add(RecipeCard.buildRecipeCard(context,dummyRecipe));
+        cards.add(RecipeCard.buildRecipeCard(context,dummyRecipe));
 
         return cards;
     }
@@ -78,7 +84,7 @@ public class RecipeActivity extends AppCompatActivity {
         @Override
         protected ArrayList<Card> doInBackground(Void... params) {
             //elaborate images
-            SystemClock.sleep(1000); //delay to simulate download, don't use it in a real app
+            //SystemClock.sleep(1000); //delay to simulate download, don't use it in a real app
 
             ArrayList<Card> cards = initCard();
             return cards;
