@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,18 +24,23 @@ import butterknife.ButterKnife;
 
 public class StepListActivity extends AppCompatActivity {
 
+    private static final String INGREDIENTS = "ingredients";
+
     @BindView(R.id.imageviewRecipe) ImageView imageViewRecipe;
     @BindView(R.id.recyclerViewSteps) RecyclerView recyclerViewSteps;
+    @BindView(R.id.buttonIngredients) Button buttonIngredients;
 
     private Recipe selectedRecipe;
     private boolean mTwoPane;
     private BakingAppApplication applicationReference;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_list);
         ButterKnife.bind(this);
+        context = this;
 
         applicationReference = ((BakingAppApplication)getApplicationContext());
         selectedRecipe = applicationReference.getSelectedRecipe();
@@ -51,6 +57,23 @@ public class StepListActivity extends AppCompatActivity {
 
         recyclerViewSteps.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewSteps.setAdapter(new SimpleItemRecyclerViewAdapter(selectedRecipe.getSteps()));
+
+
+        buttonIngredients.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mTwoPane) {
+                    Bundle arguments = new Bundle();
+                    StepDetailFragment fragment = new StepDetailFragment();
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.step_detail_container, fragment)
+                            .commit();
+                } else {
+                    Intent intent = new Intent(context, IngredientActivity.class);
+                    context.startActivity(intent);
+                }
+            }
+        });
     }
 
     public class SimpleItemRecyclerViewAdapter

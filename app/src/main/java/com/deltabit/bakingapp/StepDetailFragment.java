@@ -25,7 +25,7 @@ import butterknife.ButterKnife;
  */
 public class StepDetailFragment extends Fragment {
 
-    public static final String ARG_ITEM_ID = "item_id";
+    public static final String ARG_ITEM_ID = "step_id";
     private static final String PLACEHOLDER_URL = "https://s3.amazonaws.com/sitesusa/wp-content/uplo" +
                                                   "ads/sites/212/2016/05/600-x-360-Background-with-t" +
                                                   "he-ingredients-for-a-cake-MaksimVasic-iStock-Thin" +
