@@ -60,8 +60,6 @@ public class RecipeCard{
                 .useDrawableExternal(new MaterialLargeImageCard.DrawableExternal() {
                     @Override
                     public void setupInnerViewElements(ViewGroup parent, View viewImage) {
-
-                        Picasso.with(context).setIndicatorsEnabled(true);  //only for debug tests
                         Picasso.with(context)
                                 .load(recipe.getImage())
                                 .into((ImageView) viewImage);

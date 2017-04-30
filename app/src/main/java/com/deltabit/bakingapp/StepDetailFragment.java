@@ -15,6 +15,8 @@ import com.google.android.gms.plus.PlusOneButton;
  */
 public class StepDetailFragment extends Fragment {
 
+    public static final String ARG_ITEM_ID = "item_id";
+
     // The request code must be 0 or greater.
     public StepDetailFragment() {
         // Required empty public constructor
