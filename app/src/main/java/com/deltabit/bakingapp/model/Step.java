@@ -92,6 +92,46 @@ public class Step {
         step.setThumbnailURL("");
         steps.add(step);
 
+        step = new Step();
+        step.setId(4);
+        step.setShortDescription("Starting prep");
+        step.setDescription("1. Preheat the oven to 350\\u00b0F. Butter a 9\\\" deep dish pie pan.");
+        step.setVideoURL("");
+        step.setThumbnailURL("");
+        steps.add(step);
+
+        step = new Step();
+        step.setId(5);
+        step.setShortDescription("Starting prep");
+        step.setDescription("1. Preheat the oven to 350\\u00b0F. Butter a 9\\\" deep dish pie pan.");
+        step.setVideoURL("");
+        step.setThumbnailURL("");
+        steps.add(step);
+
+        step = new Step();
+        step.setId(6);
+        step.setShortDescription("Starting prep");
+        step.setDescription("1. Preheat the oven to 350\\u00b0F. Butter a 9\\\" deep dish pie pan.");
+        step.setVideoURL("");
+        step.setThumbnailURL("");
+        steps.add(step);
+
+        step = new Step();
+        step.setId(7);
+        step.setShortDescription("Starting prep");
+        step.setDescription("1. Preheat the oven to 350\\u00b0F. Butter a 9\\\" deep dish pie pan.");
+        step.setVideoURL("");
+        step.setThumbnailURL("");
+        steps.add(step);
+
+        step = new Step();
+        step.setId(8);
+        step.setShortDescription("Starting prep");
+        step.setDescription("1. Preheat the oven to 350\\u00b0F. Butter a 9\\\" deep dish pie pan.");
+        step.setVideoURL("");
+        step.setThumbnailURL("");
+        steps.add(step);
+
 
         return steps;
     }

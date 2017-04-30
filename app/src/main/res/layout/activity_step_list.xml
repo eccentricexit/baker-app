@@ -1,36 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
     tools:context="com.deltabit.bakingapp.StepListActivity">
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+
+
+
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
             <ImageView
                 android:id="@+id/imageviewRecipe"
-                android:background="@color/colorPrimary"
                 android:layout_width="match_parent"
-                android:layout_height="280dp" />
+                android:layout_height="200dp"
+                android:background="@color/colorAccent"
+                android:scaleType="centerCrop" />
 
             <Button
                 android:id="@+id/buttonIngredients"
-                android:text="Ingredients"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="Ingredients" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerViewSteps"
                 android:layout_width="match_parent"
-                android:background="@color/colorPrimary"
-                android:layout_height="200dp"/>
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
-    </ScrollView>
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>
