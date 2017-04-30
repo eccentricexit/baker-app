@@ -3,6 +3,9 @@ package com.deltabit.bakingapp.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Ingredient {
 
     @SerializedName("quantity")
@@ -39,4 +42,34 @@ public class Ingredient {
         this.ingredient = ingredient;
     }
 
+    public static List<Ingredient> getFakeIngredients(){
+        List<Ingredient> ingredients = new ArrayList<>();
+        Ingredient ingredient;
+
+        ingredient = new Ingredient();
+        ingredient.setQuantity(350);
+        ingredient.setMeasure("G");
+        ingredient.setIngredient("Bittersweet chocolate (60-70% cacao)");
+        ingredients.add(ingredient);
+
+        ingredient = new Ingredient();
+        ingredient.setQuantity(226);
+        ingredient.setMeasure("G");
+        ingredient.setIngredient("unsalted butter");
+        ingredients.add(ingredient);
+
+        ingredient = new Ingredient();
+        ingredient.setQuantity(300);
+        ingredient.setMeasure("G");
+        ingredient.setIngredient("granulated sugar");
+        ingredients.add(ingredient);
+
+        ingredient = new Ingredient();
+        ingredient.setQuantity(100);
+        ingredient.setMeasure("G");
+        ingredient.setIngredient("light brown sugar");
+        ingredients.add(ingredient);
+
+        return ingredients;
+    }
 }

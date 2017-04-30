@@ -47,7 +47,9 @@ public class RecipeCard{
         t2.setOnActionClickListener(new BaseSupplementalAction.OnActionClickListener() {
             @Override
             public void onClick(Card card, View view) {
-                Toast.makeText(context, " Click on Text LEARN ", Toast.LENGTH_SHORT).show();
+                ((BakingAppApplication)context.getApplicationContext()).setSelectedRecipe(recipe);
+                Intent i = new Intent(context,StepListActivity.class);
+                context.startActivity(i);
             }
         });
         actions.add(t2);
@@ -71,7 +73,9 @@ public class RecipeCard{
         card.setOnClickListener(new Card.OnCardClickListener() {
             @Override
             public void onClick(Card card, View view) {
-                Toast.makeText(context, " Click on ActionArea ", Toast.LENGTH_SHORT).show();
+                ((BakingAppApplication)context.getApplicationContext()).setSelectedRecipe(recipe);
+                Intent i = new Intent(context,StepListActivity.class);
+                context.startActivity(i);
             }
         });
 

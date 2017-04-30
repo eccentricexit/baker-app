@@ -30,6 +30,7 @@ public class RecipeActivity extends AppCompatActivity {
     private CardArrayRecyclerViewAdapter mCardArrayAdapter;
     private Context context;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,16 +58,11 @@ public class RecipeActivity extends AppCompatActivity {
     }
 
     private ArrayList<Card> initCard() {
-        Recipe dummyRecipe = new Recipe();
-        dummyRecipe.setName("Nutella Pie");
-        dummyRecipe.setImage("http://ichef.bbci.co.uk/news/660/cpsprodpb/1325A/production/_88762487_junk_food.jpg");
 
         //Init an array of Cards
         ArrayList<Card> cards = new ArrayList<>();
-        cards.add(RecipeCard.buildRecipeCard(context,dummyRecipe));
-        cards.add(RecipeCard.buildRecipeCard(context,dummyRecipe));
-        cards.add(RecipeCard.buildRecipeCard(context,dummyRecipe));
-        cards.add(RecipeCard.buildRecipeCard(context,dummyRecipe));
+        for(Recipe recipe : Recipe.getFakeRecipies())
+            cards.add(RecipeCard.buildRecipeCard(context,recipe));
 
         return cards;
     }
