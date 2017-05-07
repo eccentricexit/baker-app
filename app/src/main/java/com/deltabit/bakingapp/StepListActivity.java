@@ -95,15 +95,15 @@ public class StepListActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.step = steps.get(position);
-            holder.textViewItemId.setText(holder.step.getId().toString());
+            holder.textViewItemId.setText(holder.step.getId()+1+"");
             holder.textViewItemContent.setText(holder.step.getShortDescription());
 
             holder.viewHolder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    applicationReference.setSelectedStep(holder.step);
+                    applicationReference.setSelectedStep(position);
 
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();

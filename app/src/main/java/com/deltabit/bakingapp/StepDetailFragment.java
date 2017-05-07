@@ -43,7 +43,7 @@ public class StepDetailFragment extends Fragment {
         context = getActivity();
 
         applicationReference = ((BakingAppApplication)context.getApplicationContext());
-        if(applicationReference.getSelectedStep()!=null) setupUI(applicationReference.getSelectedStep());
+        updateSelectedStepInfo();
 
         return view;
     }
@@ -60,8 +60,16 @@ public class StepDetailFragment extends Fragment {
                 .placeholder(R.drawable.nopreviewavailable)
                 .error(R.drawable.nopreviewavailable)
                 .into(imageViewStepVideo);
-
     }
+
+    public void updateSelectedStepInfo(){
+        setupUI(
+                applicationReference
+                        .getSteps()
+                        .get(applicationReference.getSelectedStep())
+        );
+    }
+
 
     @Override
     public void onResume() {
