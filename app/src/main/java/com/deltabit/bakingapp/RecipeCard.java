@@ -22,7 +22,9 @@ import it.gmariotti.cardslib.library.internal.Card;
  * Created by rigel on 29/04/17.
  */
 
-public class RecipeCard{
+public class RecipeCard {
+
+    private static final String NO_PREVIEW_AVAILABLE_IMAGE = "http://www.finescale.com/sitefiles/images/no-preview-available.png";
 
     public static MaterialLargeImageCard buildRecipeCard(final Context context, final Recipe recipe) {
 
@@ -35,7 +37,7 @@ public class RecipeCard{
 
                 Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
-                String shareBody = "What do you think of "+recipe.getName();
+                String shareBody = "What do you think of " + recipe.getName();
                 sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Recipe");
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
                 context.startActivity(Intent.createChooser(sharingIntent, "Share via"));
@@ -47,8 +49,8 @@ public class RecipeCard{
         t2.setOnActionClickListener(new BaseSupplementalAction.OnActionClickListener() {
             @Override
             public void onClick(Card card, View view) {
-                ((BakingAppApplication)context.getApplicationContext()).setSelectedRecipe(recipe);
-                Intent i = new Intent(context,StepListActivity.class);
+                ((BakingAppApplication) context.getApplicationContext()).setSelectedRecipe(recipe);
+                Intent i = new Intent(context, StepListActivity.class);
                 context.startActivity(i);
             }
         });
@@ -60,9 +62,15 @@ public class RecipeCard{
                 .useDrawableExternal(new MaterialLargeImageCard.DrawableExternal() {
                     @Override
                     public void setupInnerViewElements(ViewGroup parent, View viewImage) {
+                        if (recipe.getImage() != null || !recipe.getImage().equals(""))
+                            recipe.setImage(Util.PLACEHOLDER_URL);
+
                         Picasso.with(context)
                                 .load(recipe.getImage())
+                                .placeholder(R.drawable.nopreviewavailable)
+                                .error(R.drawable.nopreviewavailable)
                                 .into((ImageView) viewImage);
+
                     }
                 })
                 .setupSupplementalActions(R.layout.carddemo_native_material_supplemental_actions_large, actions)
@@ -71,8 +79,8 @@ public class RecipeCard{
         card.setOnClickListener(new Card.OnCardClickListener() {
             @Override
             public void onClick(Card card, View view) {
-                ((BakingAppApplication)context.getApplicationContext()).setSelectedRecipe(recipe);
-                Intent i = new Intent(context,StepListActivity.class);
+                ((BakingAppApplication) context.getApplicationContext()).setSelectedRecipe(recipe);
+                Intent i = new Intent(context, StepListActivity.class);
                 context.startActivity(i);
             }
         });

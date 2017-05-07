@@ -51,9 +51,11 @@ public class StepListActivity extends AppCompatActivity {
     private void setupUI(Recipe selectedRecipe) {
         assert selectedRecipe!=null;
 
-        Picasso.with(this)
-                .load(selectedRecipe.getImage())
-                .into(imageViewRecipe);
+        if(selectedRecipe.getImage()!=null && !selectedRecipe.getImage().equals("")) {
+            Picasso.with(this)
+                    .load(selectedRecipe.getImage())
+                    .into(imageViewRecipe);
+        }
 
         recyclerViewSteps.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewSteps.setAdapter(new SimpleItemRecyclerViewAdapter(selectedRecipe.getSteps()));

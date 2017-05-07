@@ -6,6 +6,7 @@ import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
@@ -15,7 +16,9 @@ import android.widget.Toast;
 import com.deltabit.bakingapp.model.Recipe;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import it.gmariotti.cardslib.library.cards.actions.BaseSupplementalAction;
 import it.gmariotti.cardslib.library.cards.actions.IconSupplementalAction;
@@ -27,6 +30,7 @@ import it.gmariotti.cardslib.library.recyclerview.view.CardRecyclerView;
 
 public class RecipeActivity extends AppCompatActivity {
 
+    private static final String LOG_TAG = RecipeActivity.class.getSimpleName();
     private CardArrayRecyclerViewAdapter mCardArrayAdapter;
     private Context context;
 
@@ -58,11 +62,23 @@ public class RecipeActivity extends AppCompatActivity {
     }
 
     private ArrayList<Card> initCard() {
+        List<Recipe> recipies = null;
+        try {
+            String jsonRecipe = Util.getStringFromJsonFile(context);
+            recipies = Recipe.getRecipiesFromJson(jsonRecipe);
 
-        //Init an array of Cards
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         ArrayList<Card> cards = new ArrayList<>();
-        for(Recipe recipe : Recipe.getFakeRecipies())
-            cards.add(RecipeCard.buildRecipeCard(context,recipe));
+
+        if(recipies!=null)
+            for (Recipe recipe : recipies)
+                cards.add(RecipeCard.buildRecipeCard(context, recipe));
+        else
+            Log.d(LOG_TAG,"recipies == null");
+
 
         return cards;
     }
@@ -79,9 +95,6 @@ public class RecipeActivity extends AppCompatActivity {
 
         @Override
         protected ArrayList<Card> doInBackground(Void... params) {
-            //elaborate images
-            //SystemClock.sleep(1000); //delay to simulate download, don't use it in a real app
-
             ArrayList<Card> cards = initCard();
             return cards;
         }

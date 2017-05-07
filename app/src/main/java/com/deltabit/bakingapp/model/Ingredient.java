@@ -10,7 +10,7 @@ public class Ingredient {
 
     @SerializedName("quantity")
     @Expose
-    private Integer quantity;
+    private String quantity;
     @SerializedName("measure")
     @Expose
     private String measure;
@@ -18,11 +18,11 @@ public class Ingredient {
     @Expose
     private String ingredient;
 
-    public Integer getQuantity() {
+    public String getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
 
@@ -47,25 +47,25 @@ public class Ingredient {
         Ingredient ingredient;
 
         ingredient = new Ingredient();
-        ingredient.setQuantity(350);
+        ingredient.setQuantity("350");
         ingredient.setMeasure("G");
         ingredient.setIngredient("Bittersweet chocolate (60-70% cacao)");
         ingredients.add(ingredient);
 
         ingredient = new Ingredient();
-        ingredient.setQuantity(226);
+        ingredient.setQuantity("226");
         ingredient.setMeasure("G");
         ingredient.setIngredient("unsalted butter");
         ingredients.add(ingredient);
 
         ingredient = new Ingredient();
-        ingredient.setQuantity(300);
+        ingredient.setQuantity("300");
         ingredient.setMeasure("G");
         ingredient.setIngredient("granulated sugar");
         ingredients.add(ingredient);
 
         ingredient = new Ingredient();
-        ingredient.setQuantity(100);
+        ingredient.setQuantity("100");
         ingredient.setMeasure("G");
         ingredient.setIngredient("light brown sugar");
         ingredients.add(ingredient);

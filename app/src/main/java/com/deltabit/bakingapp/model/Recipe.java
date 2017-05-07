@@ -1,7 +1,10 @@
 package com.deltabit.bakingapp.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -117,4 +120,9 @@ public class Recipe {
         return recipies;
     }
 
+    public static List<Recipe> getRecipiesFromJson(String json){
+        Recipe[] recipies = new Gson().fromJson(json,Recipe[].class);
+
+        return Arrays.asList(recipies);
+    }
 }

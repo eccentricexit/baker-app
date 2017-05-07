@@ -26,10 +26,6 @@ import butterknife.ButterKnife;
 public class StepDetailFragment extends Fragment {
 
     public static final String ARG_ITEM_ID = "step_id";
-    private static final String PLACEHOLDER_URL = "https://s3.amazonaws.com/sitesusa/wp-content/uplo" +
-                                                  "ads/sites/212/2016/05/600-x-360-Background-with-t" +
-                                                  "he-ingredients-for-a-cake-MaksimVasic-iStock-Thin" +
-                                                  "kstock-464617462.jpg";
 
     @BindView(R.id.imageViewStepVideo) ImageView imageViewStepVideo;
     @BindView(R.id.textViewStepShortDescription) TextView textViewStepShortDescription;
@@ -55,11 +51,16 @@ public class StepDetailFragment extends Fragment {
     private void setupUI(Step selectedStep) {
         textViewStepShortDescription.setText(selectedStep.getShortDescription());
         textViewStepLongDescription.setText(selectedStep.getDescription());
-        if(selectedStep.getThumbnailURL()==null || selectedStep.getThumbnailURL().equals("")) {
-            Picasso.with(context)
-                    .load(PLACEHOLDER_URL)
-                    .into(imageViewStepVideo);
-        }
+
+        if(selectedStep.getThumbnailURL()==null || selectedStep.getThumbnailURL().equals(""))
+            selectedStep.setThumbnailURL(Util.NO_PREVIEW_AVAILABLE);
+
+        Picasso.with(context)
+                .load(selectedStep.getThumbnailURL())
+                .placeholder(R.drawable.nopreviewavailable)
+                .error(R.drawable.nopreviewavailable)
+                .into(imageViewStepVideo);
+
     }
 
     @Override
