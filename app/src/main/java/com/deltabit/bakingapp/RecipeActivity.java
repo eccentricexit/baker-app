@@ -27,13 +27,19 @@ import it.gmariotti.cardslib.library.cards.material.MaterialLargeImageCard;
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.recyclerview.internal.CardArrayRecyclerViewAdapter;
 import it.gmariotti.cardslib.library.recyclerview.view.CardRecyclerView;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class RecipeActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = RecipeActivity.class.getSimpleName();
+    private static final String RECIPIES_URL = "https://d17h27t6h515a5.cloudfront.net/topher/2017" +
+                                               "/May/5907926b_baking/baking.json";
     private CardArrayRecyclerViewAdapter mCardArrayAdapter;
     private Context context;
 
+    OkHttpClient client = new OkHttpClient();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +70,14 @@ public class RecipeActivity extends AppCompatActivity {
     private ArrayList<Card> initCard() {
         List<Recipe> recipies = null;
         try {
-            String jsonRecipe = Util.getStringFromJsonFile(context);
-            recipies = Recipe.getRecipiesFromJson(jsonRecipe);
+            Request request = new Request.Builder()
+                    .url(RECIPIES_URL)
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            String jsonRecipies = response.body().string();
+
+            recipies = Recipe.getRecipiesFromJson(jsonRecipies);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -105,4 +117,6 @@ public class RecipeActivity extends AppCompatActivity {
             updateAdapter(cards);
         }
     }
+
+
 }
