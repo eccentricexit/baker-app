@@ -27,12 +27,7 @@ public class StepDetailActivity extends AppCompatActivity {
 
     private void setupFragment(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
-            Bundle arguments = new Bundle();
-            arguments.putString(StepDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(StepDetailFragment.ARG_ITEM_ID));
-
             fragment = new StepDetailFragment();
-            fragment.setArguments(arguments);
 
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.step_detail_container, fragment)
@@ -55,14 +50,14 @@ public class StepDetailActivity extends AppCompatActivity {
     public void btnPreviousClick(View view) {
         Log.d(LOG_TAG,"previous button clicked");
         application.setSelectedStep(application.getSelectedStep()-1);
-        fragment.updateSelectedStepInfo();
+        fragment.updateSelectedStepInfo(application.getSteps().get(application.getSelectedStep()));
         updateNavigationButtons();
     }
 
     public void btnNextClick(View view) {
         Log.d(LOG_TAG,"next button clicked");
         application.setSelectedStep(application.getSelectedStep()+1);
-        fragment.updateSelectedStepInfo();
+        fragment.updateSelectedStepInfo(application.getSteps().get(application.getSelectedStep()));
         updateNavigationButtons();
     }
 }
