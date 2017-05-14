@@ -3,6 +3,7 @@
     package="com.deltabit.bakingapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".BakingAppApplication"
@@ -21,7 +22,7 @@
         <activity android:name=".StepDetailActivity" />
         <activity android:name=".IngredientActivity" />
 
-        <receiver android:name=".BakerAppWidget">
+        <receiver android:name=".BakingAppWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

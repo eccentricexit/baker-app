@@ -12,32 +12,33 @@ import java.util.List;
  */
 
 public class BakingAppApplication extends Application {
-    private Recipe selectedRecipe;
-    private List<Step> steps;
-    private int selectedStep;
+    private List<Recipe> recipies;
+    private int selectedStepId;
+    private int selectedRecipeId;
 
     public List<Step> getSteps() {
-        return steps;
+        return recipies.get(selectedRecipeId).getSteps();
     }
 
-    public void setSteps(List<Step> steps) {
-        this.steps = steps;
+    public int getSelectedStepId() {
+        return selectedStepId;
     }
 
-    public int getSelectedStep() {
-        return selectedStep;
+    public void setSelectedStepId(int selectedStepId) {
+        this.selectedStepId = selectedStepId;
     }
 
-    public void setSelectedStep(int selectedStep) {
-        this.selectedStep = selectedStep;
-    }
     public Recipe getSelectedRecipe() {
-        return selectedRecipe;
-    }
-    public void setSelectedRecipe(Recipe selectedRecipe) {
-        this.selectedRecipe = selectedRecipe;
+        return recipies.get(selectedRecipeId);
     }
 
+    public List<Recipe> getRecipies() {
+        return recipies;
+    }
+
+    public void setRecipies(List<Recipe> recipies) {
+        this.recipies = recipies;
+    }
 
 
 }

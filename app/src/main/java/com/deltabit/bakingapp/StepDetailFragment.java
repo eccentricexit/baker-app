@@ -13,9 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.deltabit.bakingapp.R;
 import com.deltabit.bakingapp.model.Step;
-import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
@@ -31,10 +29,7 @@ import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.gms.plus.PlusOneButton;
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,8 +55,7 @@ public class StepDetailFragment extends Fragment {
     private Context context;
     private SimpleExoPlayer player;
 
-    public StepDetailFragment() {
-    }
+    public StepDetailFragment() { }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,7 +65,7 @@ public class StepDetailFragment extends Fragment {
         applicationReference = ((BakingAppApplication) context.getApplicationContext());
 
         updateSelectedStepInfo(applicationReference
-                .getSteps().get(applicationReference.getSelectedStep())
+                .getSteps().get(applicationReference.getSelectedStepId())
         );
         return view;
     }
@@ -107,7 +101,9 @@ public class StepDetailFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        player.release();
+        if(player!=null) {
+            player.release();
+        }
     }
 
     private void setupExoPlayer(Step selectedStep) {
@@ -126,8 +122,7 @@ public class StepDetailFragment extends Fragment {
                     new DefaultTrackSelector(videoTrackSelectionFactory);
 
             // 2. Create the player
-            player =
-                    ExoPlayerFactory.newSimpleInstance(context, trackSelector);
+            player = ExoPlayerFactory.newSimpleInstance(context, trackSelector);
 
             simpleExoPlayerView.setPlayer(player);
 

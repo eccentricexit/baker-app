@@ -2,6 +2,7 @@ package com.deltabit.bakingapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,7 +38,6 @@ public class RecipeActivity extends AppCompatActivity {
                                                "/May/5907926b_baking/baking.json";
     private CardArrayRecyclerViewAdapter mCardArrayAdapter;
     private Context context;
-
 
 
     @Override
@@ -83,6 +83,8 @@ public class RecipeActivity extends AppCompatActivity {
             String jsonRecipes = response.body().string();
 
             recipies = Recipe.getRecipiesFromJson(jsonRecipes);
+            ((BakingAppApplication) context.getApplicationContext()).setRecipies(recipies);
+
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -90,9 +92,10 @@ public class RecipeActivity extends AppCompatActivity {
 
         ArrayList<Card> cards = new ArrayList<>();
 
+        int id = 0;
         if(recipies!=null)
             for (Recipe recipe : recipies)
-                cards.add(buildRecipeCard(context, recipe));
+                cards.add(buildRecipeCard(context, recipe,id++));
         else
             Log.d(LOG_TAG,"recipes == null");
 
@@ -123,9 +126,15 @@ public class RecipeActivity extends AppCompatActivity {
         }
     }
 
-    private static final String NO_PREVIEW_AVAILABLE_IMAGE = "http://www.finescale.com/sitefiles/images/no-preview-available.png";
+    private static final String NO_PREVIEW_AVAILABLE_IMAGE = "http://www.finescale.com/sitefiles/" +
+                                                             "images/no-preview-available.png";
 
-    public static MaterialLargeImageCard buildRecipeCard(final Context context, final Recipe recipe) {
+    public static MaterialLargeImageCard buildRecipeCard(
+            final Context context,
+            final Recipe recipe,
+            final int id
+    )
+    {
 
         ArrayList<BaseSupplementalAction> actions = new ArrayList<>();
         TextSupplementalAction t1 = new TextSupplementalAction(context, R.id.text1);
@@ -148,8 +157,8 @@ public class RecipeActivity extends AppCompatActivity {
         t2.setOnActionClickListener(new BaseSupplementalAction.OnActionClickListener() {
             @Override
             public void onClick(Card card, View view) {
-                ((BakingAppApplication) context.getApplicationContext()).setSteps(recipe.getSteps());
-                ((BakingAppApplication) context.getApplicationContext()).setSelectedRecipe(recipe);
+                ((BakingAppApplication) context.getApplicationContext()).setSelectedStepId(id);
+                saveSelectedRecipeToSharedPreferences(id,recipe,context);
                 Intent i = new Intent(context, StepListActivity.class);
                 context.startActivity(i);
             }
@@ -179,15 +188,30 @@ public class RecipeActivity extends AppCompatActivity {
         card.setOnClickListener(new Card.OnCardClickListener() {
             @Override
             public void onClick(Card card, View view) {
-                ((BakingAppApplication) context.getApplicationContext()).setSteps(recipe.getSteps());
-                ((BakingAppApplication) context.getApplicationContext()).setSelectedRecipe(recipe);
+
+                ((BakingAppApplication) context.getApplicationContext()).setSelectedStepId(id);
+
+                saveSelectedRecipeToSharedPreferences(id,recipe,context);
+
                 Intent i = new Intent(context, StepListActivity.class);
                 context.startActivity(i);
             }
         });
 
         return card;
+    }
 
+    public static void saveSelectedRecipeToSharedPreferences(int selectedRecipeId,Recipe selectedRecipe,Context context){
+        SharedPreferences.Editor editor = context.getSharedPreferences(
+                context.getString(R.string.SHARED_PREFERENCES_KEY),
+                MODE_PRIVATE
+        ).edit();
+
+
+        editor.putString(context.getString(R.string.RECIPE_TITLE_KEY),selectedRecipe.getName());
+        editor.putInt(context.getString(R.string.SELECTED_RECIPE_ID_KEY), selectedRecipeId);
+
+        editor.commit();
     }
 
 

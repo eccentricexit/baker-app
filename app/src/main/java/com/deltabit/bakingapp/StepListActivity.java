@@ -1,11 +1,15 @@
 package com.deltabit.bakingapp;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +29,7 @@ import butterknife.ButterKnife;
 public class StepListActivity extends AppCompatActivity {
 
     private static final String INGREDIENTS = "ingredients";
+    private static final String LOG_TAG = StepListActivity.class.getSimpleName();
 
     @BindView(R.id.imageviewRecipe) ImageView imageViewRecipe;
     @BindView(R.id.recyclerViewSteps) RecyclerView recyclerViewSteps;
@@ -76,6 +81,20 @@ public class StepListActivity extends AppCompatActivity {
                 }
             }
         });
+
+        saveStepToSharedPreferences(0,selectedRecipe.getSteps().get(0).getShortDescription());
+    }
+
+    public void saveStepToSharedPreferences(int selectedStepId,String selectedStepTitle){
+        SharedPreferences.Editor editor = context.getSharedPreferences(
+                context.getString(R.string.SHARED_PREFERENCES_KEY),
+                MODE_PRIVATE
+        ).edit();
+
+        editor.putInt(context.getString(R.string.SELECTED_STEP_ID_KEY), selectedStepId);
+        editor.putString(context.getString(R.string.SELECTED_STEP_TITLE_KEY),selectedStepTitle);
+
+        editor.commit();
     }
 
     public class SimpleItemRecyclerViewAdapter
@@ -103,7 +122,9 @@ public class StepListActivity extends AppCompatActivity {
             holder.viewHolder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    applicationReference.setSelectedStep(position);
+                    applicationReference.setSelectedStepId(position);
+                    saveStepToSharedPreferences(position,holder.step.getShortDescription());
+                    requestWidgetUpdate();
 
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
@@ -147,5 +168,16 @@ public class StepListActivity extends AppCompatActivity {
                 return super.toString() + " '" + textViewItemContent.getText() + "'";
             }
         }
+    }
+
+    private void requestWidgetUpdate(){
+        Intent intent = new Intent(this, BakingAppWidget.class);
+        intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
+        int ids[] = AppWidgetManager.getInstance(getApplication())
+                .getAppWidgetIds(new ComponentName(getApplication(), BakingAppWidget.class));
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,ids);
+        sendBroadcast(intent);
+
+        Log.d(LOG_TAG,"Sending update broadcast");
     }
 }
