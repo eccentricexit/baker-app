@@ -18,6 +18,7 @@ import com.squareup.picasso.Picasso;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import it.gmariotti.cardslib.library.cards.actions.BaseSupplementalAction;
 import it.gmariotti.cardslib.library.cards.actions.TextSupplementalAction;
@@ -37,7 +38,7 @@ public class RecipeActivity extends AppCompatActivity {
     private CardArrayRecyclerViewAdapter mCardArrayAdapter;
     private Context context;
 
-    OkHttpClient client = new OkHttpClient();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +69,14 @@ public class RecipeActivity extends AppCompatActivity {
         try {
             Request request = new Request.Builder()
                     .url(RECIPES_URL)
+                    .build();
+
+            Log.d(LOG_TAG,"inside init card");
+
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .connectTimeout(30,TimeUnit.SECONDS)
+                    .readTimeout(30,TimeUnit.SECONDS)
+                    .writeTimeout(30,TimeUnit.SECONDS)
                     .build();
 
             Response response = client.newCall(request).execute();
