@@ -6,7 +6,9 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +55,11 @@ public class RecipeActivity extends AppCompatActivity {
 
         CardRecyclerView mRecyclerView = (CardRecyclerView) findViewById(R.id.carddemo_recyclerview2);
         mRecyclerView.setHasFixedSize(false);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        if(!isTabletInLandscapeMode()) {
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        }else{
+            mRecyclerView.setLayoutManager(new GridLayoutManager(context,3));
+        }
 
         //Set the empty view
         if (mRecyclerView != null) {
@@ -212,6 +218,19 @@ public class RecipeActivity extends AppCompatActivity {
         editor.putInt(context.getString(R.string.SELECTED_RECIPE_ID_KEY), selectedRecipeId);
 
         editor.commit();
+    }
+
+    private boolean isTabletInLandscapeMode() {
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        int widthPixels = metrics.widthPixels;
+
+        float scaleFactor = metrics.density;
+
+        float widthDp = widthPixels / scaleFactor;
+
+        return widthDp>=900;
     }
 
 

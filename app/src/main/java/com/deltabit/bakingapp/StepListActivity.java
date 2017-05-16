@@ -47,6 +47,10 @@ public class StepListActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         context = this;
 
+        if (findViewById(R.id.step_detail_container) != null)
+            mTwoPane = true;
+
+
         applicationReference = ((BakingAppApplication)getApplicationContext());
         selectedRecipe = applicationReference.getSelectedRecipe();
         if(selectedRecipe!=null) setupUI(selectedRecipe);
