@@ -55,6 +55,18 @@ public class StepListActivity extends AppCompatActivity {
         selectedRecipe = applicationReference.getSelectedRecipe();
         if(selectedRecipe!=null) setupUI(selectedRecipe);
 
+        applicationReference.setSelectedStepId(0);
+
+        if (mTwoPane) {
+            StepDetailFragment fragment = new StepDetailFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.step_detail_container, fragment)
+                    .commit();
+        } else {
+            Intent intent = new Intent(context, IngredientActivity.class);
+            context.startActivity(intent);
+        }
+
     }
 
     private void setupUI(Recipe selectedRecipe) {
@@ -74,7 +86,6 @@ public class StepListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (mTwoPane) {
-                    Bundle arguments = new Bundle();
                     StepDetailFragment fragment = new StepDetailFragment();
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.step_detail_container, fragment)
@@ -87,6 +98,8 @@ public class StepListActivity extends AppCompatActivity {
         });
 
         saveStepToSharedPreferences(0,selectedRecipe.getSteps().get(0).getShortDescription());
+
+
     }
 
     public void saveStepToSharedPreferences(int selectedStepId,String selectedStepTitle){
