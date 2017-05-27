@@ -13,9 +13,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.deltabit.bakingapp.model.Recipe;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -23,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import it.gmariotti.cardslib.library.cards.actions.BaseSupplementalAction;
 import it.gmariotti.cardslib.library.cards.actions.TextSupplementalAction;
 import it.gmariotti.cardslib.library.cards.material.MaterialLargeImageCard;
@@ -38,14 +42,18 @@ public class RecipeActivity extends AppCompatActivity {
     private static final String LOG_TAG = RecipeActivity.class.getSimpleName();
     private static final String RECIPES_URL = "https://d17h27t6h515a5.cloudfront.net/topher/2017" +
                                                "/May/5907926b_baking/baking.json";
+
     private CardArrayRecyclerViewAdapter mCardArrayAdapter;
     private Context context;
 
+    @BindView(R.id.progressBar_recipes)
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
+        ButterKnife.bind(this);
         context = this;
 
 
@@ -71,7 +79,7 @@ public class RecipeActivity extends AppCompatActivity {
     }
 
     private ArrayList<Card> initCard() {
-        List<Recipe> recipies = null;
+        List<Recipe> recipes = null;
         try {
             Request request = new Request.Builder()
                     .url(RECIPES_URL)
@@ -88,8 +96,8 @@ public class RecipeActivity extends AppCompatActivity {
             Response response = client.newCall(request).execute();
             String jsonRecipes = response.body().string();
 
-            recipies = Recipe.getRecipiesFromJson(jsonRecipes);
-            ((BakingAppApplication) context.getApplicationContext()).setRecipies(recipies);
+            recipes = Recipe.getRecipiesFromJson(jsonRecipes);
+            ((BakingApplication) context.getApplicationContext()).setRecipies(recipes);
 
 
         } catch (IOException e) {
@@ -99,8 +107,8 @@ public class RecipeActivity extends AppCompatActivity {
         ArrayList<Card> cards = new ArrayList<>();
 
         int id = 0;
-        if(recipies!=null)
-            for (Recipe recipe : recipies)
+        if(recipes!=null)
+            for (Recipe recipe : recipes)
                 cards.add(buildRecipeCard(context, recipe,id++));
         else
             Log.d(LOG_TAG,"recipes == null");
@@ -120,6 +128,12 @@ public class RecipeActivity extends AppCompatActivity {
         LoaderAsyncTask() {}
 
         @Override
+        protected void onPreExecute() {
+            progressBar.setVisibility(View.VISIBLE);
+            super.onPreExecute();
+        }
+
+        @Override
         protected ArrayList<Card> doInBackground(Void... params) {
             ArrayList<Card> cards = initCard();
             return cards;
@@ -128,6 +142,7 @@ public class RecipeActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<Card> cards) {
             //Update the adapter
+            progressBar.setVisibility(View.GONE);
             updateAdapter(cards);
         }
     }
@@ -147,13 +162,13 @@ public class RecipeActivity extends AppCompatActivity {
         t1.setOnActionClickListener(new BaseSupplementalAction.OnActionClickListener() {
             @Override
             public void onClick(Card card, View view) {
-                Toast.makeText(context, " Click on Text SHARE ", Toast.LENGTH_SHORT).show();
 
                 Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
                 String shareBody = "What do you think of " + recipe.getName();
                 sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Recipe");
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+
                 context.startActivity(Intent.createChooser(sharingIntent, "Share via"));
             }
         });
@@ -163,7 +178,7 @@ public class RecipeActivity extends AppCompatActivity {
         t2.setOnActionClickListener(new BaseSupplementalAction.OnActionClickListener() {
             @Override
             public void onClick(Card card, View view) {
-                ((BakingAppApplication) context.getApplicationContext()).setSelectedStepId(id);
+                ((BakingApplication) context.getApplicationContext()).setSelectedStepId(id);
                 saveSelectedRecipeToSharedPreferences(id,recipe,context);
                 Intent i = new Intent(context, StepListActivity.class);
                 context.startActivity(i);
@@ -195,7 +210,7 @@ public class RecipeActivity extends AppCompatActivity {
             @Override
             public void onClick(Card card, View view) {
 
-                ((BakingAppApplication) context.getApplicationContext()).setSelectedStepId(id);
+                ((BakingApplication) context.getApplicationContext()).setSelectedStepId(id);
 
                 saveSelectedRecipeToSharedPreferences(id,recipe,context);
 
@@ -216,8 +231,16 @@ public class RecipeActivity extends AppCompatActivity {
 
         editor.putString(context.getString(R.string.RECIPE_TITLE_KEY),selectedRecipe.getName());
         editor.putInt(context.getString(R.string.SELECTED_RECIPE_ID_KEY), selectedRecipeId);
+        String ingredientsJson = new Gson().toJson(selectedRecipe.getIngredients());
+        Log.d(LOG_TAG,"saving ingredientsJson to sharedPreferences: "+ingredientsJson);
+
+        editor.putString(context.getString(R.string.INGREDIENTS_KEY), ingredientsJson);
 
         editor.commit();
+    }
+
+    private  <T> void setList(String key, List<T> list, SharedPreferences.Editor editor) {
+        editor.putString(key, new Gson().toJson(list));
     }
 
     private boolean isTabletInLandscapeMode() {

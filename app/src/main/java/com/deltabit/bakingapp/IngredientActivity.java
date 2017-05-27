@@ -7,6 +7,7 @@ import com.deltabit.bakingapp.model.Ingredient;
 
 public class IngredientActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

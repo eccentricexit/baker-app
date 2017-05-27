@@ -10,10 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.deltabit.bakingapp.model.Ingredient;
-
-import java.util.List;
-
 
 public class IngredientFragment extends Fragment {
 
@@ -21,19 +17,9 @@ public class IngredientFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
-    private BakingAppApplication applicationReference;
+    private BakingApplication applicationReference;
 
     public IngredientFragment() {  }
-
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static IngredientFragment newInstance(int columnCount) {
-        IngredientFragment fragment = new IngredientFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,7 +34,7 @@ public class IngredientFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ingredient_list, container, false);
-        applicationReference = ((BakingAppApplication)getActivity().getApplicationContext());
+        applicationReference = ((BakingApplication)getActivity().getApplicationContext());
 
         // Set the adapter
         if (view instanceof RecyclerView) {

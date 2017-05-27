@@ -11,10 +11,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.deltabit.bakingapp.widget.BakingRemoteViewsProvider;
+
 public class StepDetailActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = StepDetailActivity.class.getSimpleName();
-    private BakingAppApplication application;
+    private BakingApplication application;
     private StepDetailFragment fragment;
     private Button btnPrevious;
     private Button btnNextStep;
@@ -24,7 +26,7 @@ public class StepDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_detail);
-        application = (BakingAppApplication) this.getApplicationContext();
+        application = (BakingApplication) this.getApplicationContext();
         btnPrevious = (Button) findViewById(R.id.btnPreviousStep);
         btnNextStep = (Button) findViewById(R.id.btnNextStep);
         sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREFERENCES_KEY),MODE_PRIVATE);
@@ -118,10 +120,10 @@ public class StepDetailActivity extends AppCompatActivity {
     }
 
     private void requestWidgetUpdate(){
-        Intent intent = new Intent(this, BakingAppWidget.class);
+        Intent intent = new Intent(this, BakingRemoteViewsProvider.class);
         intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
         int ids[] = AppWidgetManager.getInstance(getApplication())
-                .getAppWidgetIds(new ComponentName(getApplication(), BakingAppWidget.class));
+                .getAppWidgetIds(new ComponentName(getApplication(), BakingRemoteViewsProvider.class));
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,ids);
         sendBroadcast(intent);
 

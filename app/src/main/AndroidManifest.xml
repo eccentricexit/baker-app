@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".BakingAppApplication"
+        android:name=".BakingApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -22,7 +22,7 @@
         <activity android:name=".StepDetailActivity" />
         <activity android:name=".IngredientActivity" />
 
-        <receiver android:name=".BakingAppWidget">
+        <receiver android:name=".widget.BakingRemoteViewsProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -31,6 +31,9 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/baker_app_widget_info" />
         </receiver>
+
+        <service android:name=".widget.BakingRemoteViewsService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>

@@ -10,4 +10,5 @@
     <string name="RECIPE_TITLE_KEY">recipe_title</string>
     <string name="SELECTED_STEP_ID_KEY">selected_step_id</string>
     <string name="SELECTED_STEP_TITLE_KEY">selected_step_title</string>
+    <string name="INGREDIENTS_KEY">.ingredients_list_key</string>
 </resources>

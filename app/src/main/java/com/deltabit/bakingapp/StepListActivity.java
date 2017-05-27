@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.deltabit.bakingapp.model.Recipe;
 import com.deltabit.bakingapp.model.Step;
+import com.deltabit.bakingapp.widget.BakingRemoteViewsProvider;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -37,7 +38,7 @@ public class StepListActivity extends AppCompatActivity {
 
     private Recipe selectedRecipe;
     private boolean mTwoPane;
-    private BakingAppApplication applicationReference;
+    private BakingApplication applicationReference;
     private Context context;
 
     @Override
@@ -51,7 +52,7 @@ public class StepListActivity extends AppCompatActivity {
             mTwoPane = true;
 
 
-        applicationReference = ((BakingAppApplication)getApplicationContext());
+        applicationReference = ((BakingApplication)getApplicationContext());
         selectedRecipe = applicationReference.getSelectedRecipe();
         if(selectedRecipe!=null) setupUI(selectedRecipe);
 
@@ -62,9 +63,6 @@ public class StepListActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.step_detail_container, fragment)
                     .commit();
-        } else {
-            Intent intent = new Intent(context, IngredientActivity.class);
-            context.startActivity(intent);
         }
 
     }
@@ -188,10 +186,10 @@ public class StepListActivity extends AppCompatActivity {
     }
 
     private void requestWidgetUpdate(){
-        Intent intent = new Intent(this, BakingAppWidget.class);
+        Intent intent = new Intent(this, BakingRemoteViewsProvider.class);
         intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
         int ids[] = AppWidgetManager.getInstance(getApplication())
-                .getAppWidgetIds(new ComponentName(getApplication(), BakingAppWidget.class));
+                .getAppWidgetIds(new ComponentName(getApplication(), BakingRemoteViewsProvider.class));
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,ids);
         sendBroadcast(intent);
 

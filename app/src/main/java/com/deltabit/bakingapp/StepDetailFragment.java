@@ -51,7 +51,7 @@ public class StepDetailFragment extends Fragment {
     @BindView(R.id.simpleExoPlayerView)
     SimpleExoPlayerView simpleExoPlayerView;
 
-    private BakingAppApplication applicationReference;
+    private BakingApplication applicationReference;
     private Context context;
     private SimpleExoPlayer player;
 
@@ -62,7 +62,7 @@ public class StepDetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_step_detail, container, false);
         ButterKnife.bind(this, view);
         context = getActivity();
-        applicationReference = ((BakingAppApplication) context.getApplicationContext());
+        applicationReference = ((BakingApplication) context.getApplicationContext());
 
         updateSelectedStepInfo(applicationReference
                 .getSteps().get(applicationReference.getSelectedStepId())

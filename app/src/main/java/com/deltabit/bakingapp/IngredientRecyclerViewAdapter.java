@@ -9,15 +9,17 @@ import android.widget.TextView;
 import com.deltabit.bakingapp.IngredientFragment;
 import com.deltabit.bakingapp.model.Ingredient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class IngredientRecyclerViewAdapter extends RecyclerView.Adapter<IngredientRecyclerViewAdapter.ViewHolder> {
 
-    private final List<Ingredient> ingredients;
+    private final List<Ingredient> ingredients = new ArrayList<>();
 
     public IngredientRecyclerViewAdapter(List<Ingredient> items) {
-        ingredients = items;
+        ingredients.add(new Ingredient("Amount","Ingredient Name"));
+        ingredients.addAll(items);
     }
 
     @Override
@@ -30,7 +32,7 @@ public class IngredientRecyclerViewAdapter extends RecyclerView.Adapter<Ingredie
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.ingredient = ingredients.get(position);
-        holder.textViewIngredientId.setText(holder.ingredient.getQuantity().toString());
+        holder.textViewIngredientId.setText(holder.ingredient.getQuantity() + holder.ingredient.getMeasure() );
         holder.textIngredientDescription.setText(holder.ingredient.getIngredient());
 
     }

@@ -18,6 +18,14 @@ public class Ingredient {
     @Expose
     private String ingredient;
 
+    public Ingredient(){}
+
+    public Ingredient(String amount, String s) {
+        quantity = amount;
+        measure = "";
+        ingredient = s;
+    }
+
     public String getQuantity() {
         return quantity;
     }
@@ -31,7 +39,7 @@ public class Ingredient {
     }
 
     public void setMeasure(String measure) {
-        this.measure = measure;
+        this.measure = measure.toLowerCase();
     }
 
     public String getIngredient() {
