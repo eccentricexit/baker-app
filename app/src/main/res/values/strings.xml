@@ -11,4 +11,12 @@
     <string name="SELECTED_STEP_ID_KEY">selected_step_id</string>
     <string name="SELECTED_STEP_TITLE_KEY">selected_step_title</string>
     <string name="INGREDIENTS_KEY">.ingredients_list_key</string>
+    <string name="previous_label">Previous</string>
+    <string name="next_label">Next</string>
+    <string name="ingredients_label">Ingredients</string>
+    <string name="quantity_label">Quantity</string>
+    <string name="ingredient_label">Ingredient</string>
+    <string name="share_lable">SHARE</string>
+    <string name="view_recipe_label">VIEW RECIPE</string>
+    <string name="recipe_thumbnail_contentDescription">recipe thumbnail</string>
 </resources>

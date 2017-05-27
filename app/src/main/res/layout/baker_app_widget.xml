@@ -14,14 +14,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:text="Quantity"
+            android:text="@string/quantity_label"
             android:textSize="20sp" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="9"
-            android:text="Ingredient"
+            android:text="@string/ingredient_label"
             android:textSize="20sp" />
     </LinearLayout>
 

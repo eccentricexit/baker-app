@@ -39,7 +39,7 @@
 
         <Button
             android:id="@+id/btnPreviousStep"
-            android:text="Previous"
+            android:text="@string/previous_label"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginBottom="8dp"
@@ -72,7 +72,7 @@
 
         <Button
             android:id="@+id/btnNextStep"
-            android:text="Next"
+            android:text="@string/next_label"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginBottom="8dp"

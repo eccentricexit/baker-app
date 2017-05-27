@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:baselineAligned="false"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:orientation="horizontal"
@@ -17,6 +18,7 @@
 
         <ImageView
             android:id="@+id/imageviewRecipe"
+            android:contentDescription="@string/recipe_thumbnail_contentDescription"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:background="@color/colorAccent"
@@ -26,7 +28,7 @@
             android:id="@+id/buttonIngredients"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ingredients" />
+            android:text="@string/ingredients_label" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerViewSteps"

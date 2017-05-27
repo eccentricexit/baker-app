@@ -34,6 +34,7 @@
         <ImageView
             android:visibility="gone"
             android:id="@+id/imageViewStepVideo"
+            android:contentDescription="@string/recipe_thumbnail_contentDescription"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="#FC2"
