@@ -35,7 +35,7 @@ public class Ingredient {
     }
 
     public String getMeasure() {
-        return measure;
+        return measure.toLowerCase();
     }
 
     public void setMeasure(String measure) {

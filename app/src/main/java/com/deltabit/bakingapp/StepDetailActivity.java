@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +31,8 @@ public class StepDetailActivity extends AppCompatActivity {
         btnPrevious = (Button) findViewById(R.id.btnPreviousStep);
         btnNextStep = (Button) findViewById(R.id.btnNextStep);
         sharedPreferences = getSharedPreferences(getString(R.string.SHARED_PREFERENCES_KEY),MODE_PRIVATE);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         setupFragment(savedInstanceState);
     }

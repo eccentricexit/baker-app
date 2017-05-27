@@ -3,6 +3,7 @@ package com.deltabit.bakingapp;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,6 +38,9 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
+
 public class RecipeActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = RecipeActivity.class.getSimpleName();
@@ -56,14 +60,14 @@ public class RecipeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         context = this;
 
-
         ArrayList<Card> cards = new ArrayList<>();
-
         mCardArrayAdapter = new CardArrayRecyclerViewAdapter(context, cards);
 
         CardRecyclerView mRecyclerView = (CardRecyclerView) findViewById(R.id.carddemo_recyclerview2);
         mRecyclerView.setHasFixedSize(false);
-        if(!isTabletInLandscapeMode()) {
+        int orientation = getResources().getConfiguration().orientation;
+
+        if(orientation==ORIENTATION_PORTRAIT) {
             mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         }else{
             mRecyclerView.setLayoutManager(new GridLayoutManager(context,3));
