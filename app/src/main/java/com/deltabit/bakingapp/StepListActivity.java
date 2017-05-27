@@ -114,7 +114,7 @@ public class StepListActivity extends AppCompatActivity {
         editor.putInt(context.getString(R.string.SELECTED_STEP_ID_KEY), selectedStepId);
         editor.putString(context.getString(R.string.SELECTED_STEP_TITLE_KEY),selectedStepTitle);
 
-        editor.commit();
+        editor.apply();
     }
 
     public class SimpleItemRecyclerViewAdapter

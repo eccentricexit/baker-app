@@ -139,8 +139,7 @@ public class RecipeActivity extends AppCompatActivity {
 
         @Override
         protected ArrayList<Card> doInBackground(Void... params) {
-            ArrayList<Card> cards = initCard();
-            return cards;
+            return  initCard();
         }
 
         @Override
@@ -240,7 +239,7 @@ public class RecipeActivity extends AppCompatActivity {
 
         editor.putString(context.getString(R.string.INGREDIENTS_KEY), ingredientsJson);
 
-        editor.commit();
+        editor.apply();
     }
 
     private  <T> void setList(String key, List<T> list, SharedPreferences.Editor editor) {

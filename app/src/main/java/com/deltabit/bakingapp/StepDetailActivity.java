@@ -119,7 +119,7 @@ public class StepDetailActivity extends AppCompatActivity {
         editor.putInt(getString(R.string.SELECTED_STEP_ID_KEY), selectedStepId);
         editor.putString(getString(R.string.SELECTED_STEP_TITLE_KEY),selectedStepTitle);
 
-        editor.commit();
+        editor.apply();
     }
 
     private void requestWidgetUpdate(){
