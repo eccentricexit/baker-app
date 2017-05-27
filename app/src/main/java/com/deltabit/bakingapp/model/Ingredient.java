@@ -18,7 +18,7 @@ public class Ingredient {
     @Expose
     private String ingredient;
 
-    public Ingredient(){}
+    private Ingredient(){}
 
     public Ingredient(String amount, String s) {
         quantity = amount;
@@ -30,7 +30,7 @@ public class Ingredient {
         return quantity;
     }
 
-    public void setQuantity(String quantity) {
+    private void setQuantity(String quantity) {
         this.quantity = quantity;
     }
 
@@ -38,7 +38,7 @@ public class Ingredient {
         return measure.toLowerCase();
     }
 
-    public void setMeasure(String measure) {
+    private void setMeasure(String measure) {
         this.measure = measure.toLowerCase();
     }
 
@@ -46,7 +46,7 @@ public class Ingredient {
         return ingredient;
     }
 
-    public void setIngredient(String ingredient) {
+    private void setIngredient(String ingredient) {
         this.ingredient = ingredient;
     }
 

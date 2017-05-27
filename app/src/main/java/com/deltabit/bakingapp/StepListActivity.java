@@ -28,11 +28,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
-
 public class StepListActivity extends AppCompatActivity {
 
-    private static final String INGREDIENTS = "ingredients";
     private static final String LOG_TAG = StepListActivity.class.getSimpleName();
 
     @BindView(R.id.imageviewRecipe) ImageView imageViewRecipe;
@@ -105,7 +102,7 @@ public class StepListActivity extends AppCompatActivity {
 
     }
 
-    public void saveStepToSharedPreferences(int selectedStepId,String selectedStepTitle){
+    private void saveStepToSharedPreferences(int selectedStepId, String selectedStepTitle){
         SharedPreferences.Editor editor = context.getSharedPreferences(
                 context.getString(R.string.SHARED_PREFERENCES_KEY),
                 MODE_PRIVATE

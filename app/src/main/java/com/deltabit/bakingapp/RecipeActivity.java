@@ -3,7 +3,6 @@ package com.deltabit.bakingapp;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.deltabit.bakingapp.model.Recipe;
 import com.google.gson.Gson;
@@ -38,7 +36,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
 public class RecipeActivity extends AppCompatActivity {
@@ -50,8 +47,7 @@ public class RecipeActivity extends AppCompatActivity {
     private CardArrayRecyclerViewAdapter mCardArrayAdapter;
     private Context context;
 
-    @BindView(R.id.progressBar_recipes)
-    ProgressBar progressBar;
+    @BindView(R.id.progressBar_recipes)  ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,7 +149,7 @@ public class RecipeActivity extends AppCompatActivity {
     private static final String NO_PREVIEW_AVAILABLE_IMAGE = "http://www.finescale.com/sitefiles/" +
                                                              "images/no-preview-available.png";
 
-    public static MaterialLargeImageCard buildRecipeCard(
+    private static MaterialLargeImageCard buildRecipeCard(
             final Context context,
             final Recipe recipe,
             final int id
@@ -225,7 +221,7 @@ public class RecipeActivity extends AppCompatActivity {
         return card;
     }
 
-    public static void saveSelectedRecipeToSharedPreferences(int selectedRecipeId,Recipe selectedRecipe,Context context){
+    private static void saveSelectedRecipeToSharedPreferences(int selectedRecipeId, Recipe selectedRecipe, Context context){
         SharedPreferences.Editor editor = context.getSharedPreferences(
                 context.getString(R.string.SHARED_PREFERENCES_KEY),
                 MODE_PRIVATE

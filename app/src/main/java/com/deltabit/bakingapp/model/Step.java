@@ -28,7 +28,7 @@ public class Step {
         return id;
     }
 
-    public void setId(Integer id) {
+    private void setId(Integer id) {
         this.id = id;
     }
 
@@ -36,7 +36,7 @@ public class Step {
         return shortDescription;
     }
 
-    public void setShortDescription(String shortDescription) {
+    private void setShortDescription(String shortDescription) {
         this.shortDescription = shortDescription;
     }
 
@@ -44,7 +44,7 @@ public class Step {
         return description;
     }
 
-    public void setDescription(String description) {
+    private void setDescription(String description) {
         this.description = description;
     }
 
@@ -52,7 +52,7 @@ public class Step {
         return videoURL;
     }
 
-    public void setVideoURL(String videoURL) {
+    private void setVideoURL(String videoURL) {
         this.videoURL = videoURL;
     }
 

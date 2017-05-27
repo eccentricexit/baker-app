@@ -5,16 +5,11 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
-import android.util.Log;
 import android.widget.RemoteViews;
 
-import com.deltabit.bakingapp.IngredientActivity;
 import com.deltabit.bakingapp.R;
 import com.deltabit.bakingapp.RecipeActivity;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Implementation of App Widget functionality.

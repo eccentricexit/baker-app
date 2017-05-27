@@ -9,10 +9,8 @@ import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
-import com.deltabit.bakingapp.IngredientActivity;
 import com.deltabit.bakingapp.R;
 import com.deltabit.bakingapp.model.Ingredient;
-import com.deltabit.bakingapp.model.Recipe;
 import com.google.gson.Gson;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -21,7 +19,7 @@ import static android.content.Context.MODE_PRIVATE;
  * Created by rigel on 27/05/17.
  */
 
-public class BakingRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
+class BakingRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     private static final String LOG_TAG = BakingRemoteViewsFactory.class.getSimpleName();
     private static Ingredient[] ingredients = new Ingredient[]{new Ingredient("","No recipe selected")};
 

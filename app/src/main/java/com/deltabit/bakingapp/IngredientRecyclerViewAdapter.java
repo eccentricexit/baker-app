@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.deltabit.bakingapp.IngredientFragment;
 import com.deltabit.bakingapp.model.Ingredient;
 
 import java.util.ArrayList;

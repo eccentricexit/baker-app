@@ -42,14 +42,10 @@ public class StepDetailFragment extends Fragment {
     public static final String ARG_ITEM_ID = "step_id";
     private static final String LOG_TAG = StepDetailFragment.class.getSimpleName();
 
-    @BindView(R.id.imageViewStepVideo)
-    ImageView imageViewStepVideo;
-    @BindView(R.id.textViewStepShortDescription)
-    TextView textViewStepShortDescription;
-    @BindView(R.id.textViewStepLongDescription)
-    TextView textViewStepLongDescription;
-    @BindView(R.id.simpleExoPlayerView)
-    SimpleExoPlayerView simpleExoPlayerView;
+    @BindView(R.id.imageViewStepVideo) ImageView imageViewStepVideo;
+    @BindView(R.id.textViewStepShortDescription) TextView textViewStepShortDescription;
+    @BindView(R.id.textViewStepLongDescription) TextView textViewStepLongDescription;
+    @BindView(R.id.simpleExoPlayerView) SimpleExoPlayerView simpleExoPlayerView;
 
     private BakingApplication applicationReference;
     private Context context;

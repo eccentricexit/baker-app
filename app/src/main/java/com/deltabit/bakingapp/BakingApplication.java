@@ -11,7 +11,7 @@ import java.util.List;
  * Created by rigel on 30/04/17.
  */
 
-public class BakingApplication extends Application {
+class BakingApplication extends Application {
     private List<Recipe> recipies;
     private int selectedStepId;
     private int selectedRecipeId;

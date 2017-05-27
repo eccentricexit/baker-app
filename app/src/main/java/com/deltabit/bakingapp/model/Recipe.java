@@ -33,7 +33,7 @@ public class Recipe {
         return id;
     }
 
-    public void setId(Integer id) {
+    private void setId(Integer id) {
         this.id = id;
     }
 
@@ -41,7 +41,7 @@ public class Recipe {
         return name;
     }
 
-    public void setName(String name) {
+    private void setName(String name) {
         this.name = name;
     }
 
@@ -49,7 +49,7 @@ public class Recipe {
         return ingredients;
     }
 
-    public void setIngredients(List<Ingredient> ingredients) {
+    private void setIngredients(List<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
 
@@ -57,7 +57,7 @@ public class Recipe {
         return steps;
     }
 
-    public void setSteps(List<Step> steps) {
+    private void setSteps(List<Step> steps) {
         this.steps = steps;
     }
 
@@ -65,7 +65,7 @@ public class Recipe {
         return servings;
     }
 
-    public void setServings(Integer servings) {
+    private void setServings(Integer servings) {
         this.servings = servings;
     }
 

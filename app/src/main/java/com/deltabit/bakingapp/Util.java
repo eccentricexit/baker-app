@@ -14,7 +14,7 @@ import java.io.Writer;
  * Created by rigel on 07/05/17.
  */
 
-public class Util {
+class Util {
 
     public static final String PLACEHOLDER_URL = "https://s3.amazonaws.com/sitesusa/wp-content/uplo" +
             "ads/sites/212/2016/05/600-x-360-Background-with-t" +

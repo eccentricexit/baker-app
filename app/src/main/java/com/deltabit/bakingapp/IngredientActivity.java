@@ -3,8 +3,6 @@ package com.deltabit.bakingapp;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.deltabit.bakingapp.model.Ingredient;
-
 public class IngredientActivity extends AppCompatActivity {
 
 
