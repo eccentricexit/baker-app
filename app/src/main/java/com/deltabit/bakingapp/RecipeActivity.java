@@ -1,5 +1,7 @@
 package com.deltabit.bakingapp;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,8 +16,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RemoteViews;
 
 import com.deltabit.bakingapp.model.Recipe;
+import com.deltabit.bakingapp.widget.BakingRemoteViewsProvider;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -43,11 +47,12 @@ public class RecipeActivity extends AppCompatActivity {
     private static final String LOG_TAG = RecipeActivity.class.getSimpleName();
     private static final String RECIPES_URL = "https://d17h27t6h515a5.cloudfront.net/topher/2017" +
                                                "/May/5907926b_baking/baking.json";
-
+    private static final String NO_PREVIEW_AVAILABLE_IMAGE = "http://www.finescale.com/sitefiles/" +
+            "images/no-preview-available.png";
+    @BindView(R.id.progressBar_recipes)
+    ProgressBar progressBar;
     private CardArrayRecyclerViewAdapter mCardArrayAdapter;
     private Context context;
-
-    @BindView(R.id.progressBar_recipes)  ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,38 +128,7 @@ public class RecipeActivity extends AppCompatActivity {
         }
     }
 
-    class LoaderAsyncTask extends AsyncTask<Void, Void, ArrayList<Card>> {
-
-        LoaderAsyncTask() {}
-
-        @Override
-        protected void onPreExecute() {
-            progressBar.setVisibility(View.VISIBLE);
-            super.onPreExecute();
-        }
-
-        @Override
-        protected ArrayList<Card> doInBackground(Void... params) {
-            return  initCard();
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Card> cards) {
-            //Update the adapter
-            progressBar.setVisibility(View.GONE);
-            updateAdapter(cards);
-        }
-    }
-
-    private static final String NO_PREVIEW_AVAILABLE_IMAGE = "http://www.finescale.com/sitefiles/" +
-                                                             "images/no-preview-available.png";
-
-    private static MaterialLargeImageCard buildRecipeCard(
-            final Context context,
-            final Recipe recipe,
-            final int id
-    )
-    {
+    private MaterialLargeImageCard buildRecipeCard(final Context context, final Recipe recipe, final int id) {
 
         ArrayList<BaseSupplementalAction> actions = new ArrayList<>();
         TextSupplementalAction t1 = new TextSupplementalAction(context, R.id.text1);
@@ -177,7 +151,7 @@ public class RecipeActivity extends AppCompatActivity {
         t2.setOnActionClickListener(new BaseSupplementalAction.OnActionClickListener() {
             @Override
             public void onClick(Card card, View view) {
-                ((BakingApplication) context.getApplicationContext()).setSelectedStepId(id);
+                ((BakingApplication) context.getApplicationContext()).setSelectedRecipe(id);
                 saveSelectedRecipeToSharedPreferences(id,recipe,context);
                 Intent i = new Intent(context, StepListActivity.class);
                 context.startActivity(i);
@@ -209,7 +183,7 @@ public class RecipeActivity extends AppCompatActivity {
             @Override
             public void onClick(Card card, View view) {
 
-                ((BakingApplication) context.getApplicationContext()).setSelectedStepId(id);
+                ((BakingApplication) context.getApplicationContext()).setSelectedRecipe(id);
 
                 saveSelectedRecipeToSharedPreferences(id,recipe,context);
 
@@ -221,7 +195,7 @@ public class RecipeActivity extends AppCompatActivity {
         return card;
     }
 
-    private static void saveSelectedRecipeToSharedPreferences(int selectedRecipeId, Recipe selectedRecipe, Context context){
+    private void saveSelectedRecipeToSharedPreferences(int selectedRecipeId, Recipe selectedRecipe, Context context) {
         SharedPreferences.Editor editor = context.getSharedPreferences(
                 context.getString(R.string.SHARED_PREFERENCES_KEY),
                 MODE_PRIVATE
@@ -236,23 +210,44 @@ public class RecipeActivity extends AppCompatActivity {
         editor.putString(context.getString(R.string.INGREDIENTS_KEY), ingredientsJson);
 
         editor.apply();
+
+        requestWidgetUpdate();
     }
 
-    private  <T> void setList(String key, List<T> list, SharedPreferences.Editor editor) {
-        editor.putString(key, new Gson().toJson(list));
+    private void requestWidgetUpdate() {
+        Log.d(LOG_TAG, "requesting update");
+
+        Intent intent = new Intent(this, BakingRemoteViewsProvider.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+
+        int ids[] = AppWidgetManager.getInstance(getApplication())
+                .getAppWidgetIds(new ComponentName(getApplication(), BakingRemoteViewsProvider.class));
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        sendBroadcast(intent);
     }
 
-    private boolean isTabletInLandscapeMode() {
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+    class LoaderAsyncTask extends AsyncTask<Void, Void, ArrayList<Card>> {
 
-        int widthPixels = metrics.widthPixels;
+        LoaderAsyncTask() {
+        }
 
-        float scaleFactor = metrics.density;
+        @Override
+        protected void onPreExecute() {
+            progressBar.setVisibility(View.VISIBLE);
+            super.onPreExecute();
+        }
 
-        float widthDp = widthPixels / scaleFactor;
+        @Override
+        protected ArrayList<Card> doInBackground(Void... params) {
+            return initCard();
+        }
 
-        return widthDp>=900;
+        @Override
+        protected void onPostExecute(ArrayList<Card> cards) {
+            //Update the adapter
+            progressBar.setVisibility(View.GONE);
+            updateAdapter(cards);
+        }
     }
 
 

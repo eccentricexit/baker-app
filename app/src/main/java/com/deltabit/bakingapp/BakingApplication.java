@@ -11,7 +11,7 @@ import java.util.List;
  * Created by rigel on 30/04/17.
  */
 
-class BakingApplication extends Application {
+public class BakingApplication extends Application {
     private List<Recipe> recipies;
     private int selectedStepId;
     private int selectedRecipeId;
@@ -32,6 +32,11 @@ class BakingApplication extends Application {
         return recipies.get(selectedRecipeId);
     }
 
+    public void setSelectedRecipe(int selectedRecipe) {
+        this.selectedRecipeId = selectedRecipe;
+        this.selectedStepId = 0;
+    }
+
     public List<Recipe> getRecipies() {
         return recipies;
     }
@@ -39,6 +44,4 @@ class BakingApplication extends Application {
     public void setRecipies(List<Recipe> recipies) {
         this.recipies = recipies;
     }
-
-
 }

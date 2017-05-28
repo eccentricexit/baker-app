@@ -12,8 +12,6 @@ public class IngredientActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ingredient);
 
         if (savedInstanceState == null) {
-            // Create the detail fragment and add it to the activity
-            // using a fragment transaction.
             Bundle arguments = new Bundle();
             arguments.putString(StepDetailFragment.ARG_ITEM_ID,
                     getIntent().getStringExtra(StepDetailFragment.ARG_ITEM_ID));
