@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.deltabit.bakingapp.model.Recipe;
+import com.deltabit.bakingapp.util.SimpleIdlingResource;
 import com.deltabit.bakingapp.util.Util;
 import com.deltabit.bakingapp.widget.BakingRemoteViewsProvider;
 import com.google.gson.Gson;
@@ -46,10 +50,10 @@ public class RecipeActivity extends AppCompatActivity {
     private static final String LOG_TAG = RecipeActivity.class.getSimpleName();
     private static final String RECIPES_URL = "https://d17h27t6h515a5.cloudfront.net/topher/2017" +
                                                "/May/5907926b_baking/baking.json";
-    private static final String NO_PREVIEW_AVAILABLE_IMAGE = "http://www.finescale.com/sitefiles/" +
-            "images/no-preview-available.png";
     @BindView(R.id.progressBar_recipes)
     ProgressBar progressBar;
+    @Nullable
+    private SimpleIdlingResource mIdlingResource;
     private CardArrayRecyclerViewAdapter mCardArrayAdapter;
     private Context context;
 
@@ -63,7 +67,7 @@ public class RecipeActivity extends AppCompatActivity {
         ArrayList<Card> cards = new ArrayList<>();
         mCardArrayAdapter = new CardArrayRecyclerViewAdapter(context, cards);
 
-        CardRecyclerView mRecyclerView = (CardRecyclerView) findViewById(R.id.carddemo_recyclerview2);
+        CardRecyclerView mRecyclerView = (CardRecyclerView) findViewById(R.id.card_recyclerview);
         mRecyclerView.setHasFixedSize(false);
         int orientation = getResources().getConfiguration().orientation;
 
@@ -225,6 +229,15 @@ public class RecipeActivity extends AppCompatActivity {
         sendBroadcast(intent);
     }
 
+    @VisibleForTesting
+    @NonNull
+    public SimpleIdlingResource getIdlingResource() {
+        if (mIdlingResource == null)
+            mIdlingResource = new SimpleIdlingResource();
+
+        return mIdlingResource;
+    }
+
     class LoaderAsyncTask extends AsyncTask<Void, Void, ArrayList<Card>> {
 
         LoaderAsyncTask() {
@@ -233,6 +246,8 @@ public class RecipeActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             progressBar.setVisibility(View.VISIBLE);
+            if (mIdlingResource != null)
+                mIdlingResource.setIdleState(false);
             super.onPreExecute();
         }
 
@@ -246,6 +261,8 @@ public class RecipeActivity extends AppCompatActivity {
             //Update the adapter
             progressBar.setVisibility(View.GONE);
             updateAdapter(cards);
+            if (mIdlingResource != null)
+                mIdlingResource.setIdleState(true);
         }
     }
 
