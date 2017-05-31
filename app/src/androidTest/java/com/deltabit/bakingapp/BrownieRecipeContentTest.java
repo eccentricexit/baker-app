@@ -15,7 +15,6 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.hamcrest.core.IsInstanceOf;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -24,24 +23,18 @@ import org.junit.runner.RunWith;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.deltabit.bakingapp.AppNavigationTest.withRecyclerView;
 import static org.hamcrest.Matchers.allOf;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class AppNavigationTest {
+public class BrownieRecipeContentTest {
 
     @Rule
     public ActivityTestRule<RecipeActivity> activityTestRule = new ActivityTestRule<>(RecipeActivity.class);
     private IdlingResource idlingResource;
-
-    public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
-        return new RecyclerViewMatcher(recyclerViewId);
-    }
 
     private static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
@@ -70,76 +63,61 @@ public class AppNavigationTest {
     }
 
     @Test
-    public void recipeActivityTest() {
-        onView(withRecyclerView(R.id.card_recyclerview).atPosition(0))
-                .check(matches(hasDescendant(withText("Nutella Pie"))));
+    public void brownieRecipeContentTest() {
+        onView(withRecyclerView(R.id.card_recyclerview).atPosition(1)).perform(click());
 
-        onView(withRecyclerView(R.id.card_recyclerview).atPosition(1))
-                .check(matches(hasDescendant(withText("Brownies"))));
-    }
+        onView(withRecyclerView(R.id.recyclerViewSteps).atPosition(2)).perform(click());
 
-    @Test
-    public void clickOnRecipeNavigatesToStepListTest() {
-        onView(withRecyclerView(R.id.card_recyclerview).atPosition(0)).perform(click());
+        // Added a sleep statement to match the app's execution delay.
+        // The recommended way to handle such scenarios is to use Espresso idling resources:
+        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-        ViewInteraction imageView = onView(
-                allOf(withId(R.id.imageviewRecipe), withContentDescription("recipe thumbnail"),
+        ViewInteraction textView = onView(
+                allOf(withId(R.id.textViewStepShortDescription), withText("Melt butter and bittersweet chocolate."),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(android.R.id.content),
+                                        IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
                                         0),
                                 0),
                         isDisplayed()));
-        imageView.check(matches(isDisplayed()));
+        textView.check(matches(withText("Melt butter and bittersweet chocolate.")));
 
-        ViewInteraction button = onView(
-                allOf(withId(R.id.buttonIngredients),
+        ViewInteraction textView2 = onView(
+                allOf(withId(R.id.textViewStepLongDescription), withText("2. Melt the butter and bittersweet chocolate together in a microwave or a double boiler. If microwaving, heat for 30 seconds at a time, removing bowl and stirring ingredients in between."),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(android.R.id.content),
+                                        IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
                                         0),
                                 1),
                         isDisplayed()));
-        button.check(matches(isDisplayed()));
+        textView2.check(matches(withText("2. Melt the butter and bittersweet chocolate together in a microwave or a double boiler. If microwaving, heat for 30 seconds at a time, removing bowl and stirring ingredients in between.")));
 
-        ViewInteraction recyclerView = onView(
-                allOf(withId(R.id.recyclerViewSteps),
+        ViewInteraction button = onView(
+                allOf(withId(R.id.btnPreviousStep),
                         childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                2),
-                        isDisplayed()));
-        recyclerView.check(matches(isDisplayed()));
-
-
-    }
-
-    @Test
-    public void clickOnIngredientsNavigatesToIngredientsList() {
-        onView(withRecyclerView(R.id.card_recyclerview).atPosition(0)).perform(click());
-
-        ViewInteraction appCompatButton = onView(
-                allOf(withId(R.id.buttonIngredients), withText("Ingredients"), isDisplayed()));
-        appCompatButton.perform(click());
-
-        ViewInteraction recyclerView = onView(
-                allOf(withId(R.id.list),
-                        childAtPosition(
-                                allOf(withId(R.id.step_detail_container),
+                                allOf(withId(R.id.constraintLayout),
                                         childAtPosition(
-                                                IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
-                                                0)),
+                                                IsInstanceOf.<View>instanceOf(android.view.ViewGroup.class),
+                                                1)),
                                 0),
                         isDisplayed()));
-        recyclerView.check(matches(isDisplayed()));
-    }
+        button.check(matches(isDisplayed()));
 
+        ViewInteraction button2 = onView(
+                allOf(withId(R.id.btnNextStep),
+                        childAtPosition(
+                                allOf(withId(R.id.constraintLayout),
+                                        childAtPosition(
+                                                IsInstanceOf.<View>instanceOf(android.view.ViewGroup.class),
+                                                1)),
+                                2),
+                        isDisplayed()));
+        button2.check(matches(isDisplayed()));
 
-    @After
-    public void unregisterIdlingResource() {
-        if (idlingResource != null) {
-            Espresso.unregisterIdlingResources(idlingResource);
-        }
     }
 }
