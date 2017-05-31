@@ -50,7 +50,7 @@ public class StepDetailFragment extends Fragment {
 
     private BakingApplication applicationReference;
     private Context context;
-    private SimpleExoPlayer player;
+    private SimpleExoPlayer simpleExoPlayer;
 
     public StepDetailFragment() { }
 
@@ -96,16 +96,16 @@ public class StepDetailFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if(player!=null) {
-            player.release();
+    public void onStop() {
+        if (simpleExoPlayer != null) {
+            simpleExoPlayer.release();
         }
+        super.onStop();
     }
 
     private void setupExoPlayer(Step selectedStep) {
-        if (player != null)
-            player.release();
+        if (simpleExoPlayer != null)
+            simpleExoPlayer.release();
 
         if (selectedStep.getVideoURL() != null && !selectedStep.getVideoURL().equals("")) {
             simpleExoPlayerView.setVisibility(View.VISIBLE);
@@ -118,10 +118,10 @@ public class StepDetailFragment extends Fragment {
             TrackSelector trackSelector =
                     new DefaultTrackSelector(videoTrackSelectionFactory);
 
-            // 2. Create the player
-            player = ExoPlayerFactory.newSimpleInstance(context, trackSelector);
+            // 2. Create the simpleExoPlayer
+            simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(context, trackSelector);
 
-            simpleExoPlayerView.setPlayer(player);
+            simpleExoPlayerView.setPlayer(simpleExoPlayer);
 
 
             // Produces DataSource instances through which media data is loaded.
@@ -132,8 +132,8 @@ public class StepDetailFragment extends Fragment {
             Uri selectedVideoUri = Uri.parse(selectedStep.getVideoURL());
             MediaSource videoSource = new ExtractorMediaSource(selectedVideoUri,
                     dataSourceFactory, extractorsFactory, null, null);
-            // Prepare the player with the source.
-            player.prepare(videoSource);
+            // Prepare the simpleExoPlayer with the source.
+            simpleExoPlayer.prepare(videoSource);
         } else {
             simpleExoPlayerView.setVisibility(View.GONE);
         }
