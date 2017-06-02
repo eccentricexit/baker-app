@@ -7,12 +7,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,14 +50,23 @@ import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 public class RecipeActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = RecipeActivity.class.getSimpleName();
+    private static final String BUNDLE_CARD_RECYCLER_STATE = LOG_TAG + ".cardRecyclerBundle";
+    private static final String BUNDLE_LAST_VISIBLE_ITEM_POSITION = LOG_TAG + ".lastVisibleItemPosition";
     private static final String RECIPES_URL = "https://d17h27t6h515a5.cloudfront.net/topher/2017" +
-                                               "/May/5907926b_baking/baking.json";
+            "/May/5907926b_baking/baking.json";
+
     @BindView(R.id.progressBar_recipes)
     ProgressBar progressBar;
+    @BindView(R.id.card_recyclerview)
+    CardRecyclerView cardRecyclerView;
+
     @Nullable
-    private SimpleIdlingResource mIdlingResource;
+    private SimpleIdlingResource idlingResource;
     private CardArrayRecyclerViewAdapter mCardArrayAdapter;
     private Context context;
+    private Parcelable recyclerViewState;
+    private int scrollposition = -1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,24 +78,58 @@ public class RecipeActivity extends AppCompatActivity {
         ArrayList<Card> cards = new ArrayList<>();
         mCardArrayAdapter = new CardArrayRecyclerViewAdapter(context, cards);
 
-        CardRecyclerView mRecyclerView = (CardRecyclerView) findViewById(R.id.card_recyclerview);
-        mRecyclerView.setHasFixedSize(false);
+        cardRecyclerView.setHasFixedSize(false);
         int orientation = getResources().getConfiguration().orientation;
 
-        if(orientation==ORIENTATION_PORTRAIT) {
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        }else{
-            mRecyclerView.setLayoutManager(new GridLayoutManager(context,3));
-        }
+
+        if (orientation == ORIENTATION_PORTRAIT)
+            cardRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        else
+            cardRecyclerView.setLayoutManager(new GridLayoutManager(context, 3));
+
+
 
         //Set the empty view
-        if (mRecyclerView != null) {
-            mRecyclerView.setAdapter(mCardArrayAdapter);
+        if (cardRecyclerView != null) {
+            cardRecyclerView.setAdapter(mCardArrayAdapter);
         }
 
         //Load cards
         new LoaderAsyncTask().execute();
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+//        recyclerViewState = layoutManager.onSaveInstanceState();
+//        outState.putParcelable(BUNDLE_CARD_RECYCLER_STATE,recyclerViewState);
+        int scrollPosition = -1;
+
+        RecyclerView.LayoutManager layoutManager = cardRecyclerView.getLayoutManager();
+        if (layoutManager != null) {
+            if (layoutManager instanceof LinearLayoutManager) {
+                scrollPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
+            } else {
+                scrollPosition = ((GridLayoutManager) layoutManager).findLastVisibleItemPosition();
+            }
+        } else {
+            Log.d(LOG_TAG, "layoutManager == null");
+        }
+
+        outState.putInt(BUNDLE_LAST_VISIBLE_ITEM_POSITION, scrollPosition);
+
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState == null)
+            return;
+
+        scrollposition = savedInstanceState.getInt(BUNDLE_LAST_VISIBLE_ITEM_POSITION);
+
+    }
+
 
     private ArrayList<Card> initCard() {
         List<Recipe> recipes = null;
@@ -92,8 +137,6 @@ public class RecipeActivity extends AppCompatActivity {
             Request request = new Request.Builder()
                     .url(RECIPES_URL)
                     .build();
-
-            Log.d(LOG_TAG,"inside init card");
 
             OkHttpClient client = new OkHttpClient.Builder()
                     .connectTimeout(30,TimeUnit.SECONDS)
@@ -232,10 +275,10 @@ public class RecipeActivity extends AppCompatActivity {
     @VisibleForTesting
     @NonNull
     public SimpleIdlingResource getIdlingResource() {
-        if (mIdlingResource == null)
-            mIdlingResource = new SimpleIdlingResource();
+        if (idlingResource == null)
+            idlingResource = new SimpleIdlingResource();
 
-        return mIdlingResource;
+        return idlingResource;
     }
 
     class LoaderAsyncTask extends AsyncTask<Void, Void, ArrayList<Card>> {
@@ -246,8 +289,8 @@ public class RecipeActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             progressBar.setVisibility(View.VISIBLE);
-            if (mIdlingResource != null)
-                mIdlingResource.setIdleState(false);
+            if (idlingResource != null)
+                idlingResource.setIdleState(false);
             super.onPreExecute();
         }
 
@@ -261,8 +304,20 @@ public class RecipeActivity extends AppCompatActivity {
             //Update the adapter
             progressBar.setVisibility(View.GONE);
             updateAdapter(cards);
-            if (mIdlingResource != null)
-                mIdlingResource.setIdleState(true);
+
+            RecyclerView.LayoutManager layoutManager = cardRecyclerView.getLayoutManager();
+            if (layoutManager == null)
+                return;
+
+            int itemCount = layoutManager.getItemCount();
+
+            if (scrollposition != -1 && scrollposition != RecyclerView.NO_POSITION && scrollposition <= itemCount) {
+                Log.d(LOG_TAG, "scrolling to position " + scrollposition);
+                layoutManager.scrollToPosition(scrollposition);
+            }
+
+            if (idlingResource != null)
+                idlingResource.setIdleState(true);
         }
     }
 
