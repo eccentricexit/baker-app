@@ -12,9 +12,9 @@ This is an Android Studio project of a recipes app built as part of Udacity's An
 ## Screenshots
 ![recipe step landscape](https://raw.githubusercontent.com/mtsalenc/BakerApp/master/screenshots/Screenshot_1496703509.png) 
 ![recipes landscape](https://raw.githubusercontent.com/mtsalenc/BakerApp/master/screenshots/Screenshot_1496703495.png) 
-![widget](https://raw.githubusercontent.com/mtsalenc/BakerApp/master/screenshots/Screenshot_1496703564.png) 
 ![recipes portrait](https://raw.githubusercontent.com/mtsalenc/BakerApp/master/screenshots/Screenshot_1496703606.png) 
 ![step detail portrait](https://raw.githubusercontent.com/mtsalenc/BakerApp/master/screenshots/Screenshot_1496703620.png) 
+![widget](https://raw.githubusercontent.com/mtsalenc/BakerApp/master/screenshots/Screenshot_1496703564.png) 
 ## Libraries Used
 
 * [Butterknife](https://github.com/JakeWharton/butterknife) - Bind Android views and callbacks.
